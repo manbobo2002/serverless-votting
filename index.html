@@ -1,0 +1,140 @@
+<html>
+	<head>
+	<title>Let's vote</title>
+	  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	</head>
+	<body onload="get()">
+	<canvas id="bar-chart" width=300" height="150"></canvas>
+
+		<script>
+		
+			const list = [
+			  {
+				id: "Potato",
+				text: "Potatotext"
+			  },
+			  {
+				id: "LamLam",
+				text: "LamLamtext"
+			  },
+			  {
+				id: "Right",
+				text: "Righttext"
+			  }
+			];
+			
+			function get() {
+			console.log(list.find(list => list.id === 'Potato').text);
+			
+			for (var i=0; i<list.length;i++) {
+				id=Object.values(list)[i].id;
+				text=Object.values(list)[i].text;
+				$.ajax({
+					url: 'https://2v6q5lqyq5.execute-api.us-east-1.amazonaws.com/default/votting-function',
+					dataType: 'json',
+					type: 'post',
+					async: false,
+					contentType: 'application/json',
+					data: JSON.stringify( {
+				  "id":id,
+				  "type":"get" } ),
+					processData: false,
+					success: function( data, textStatus, jQxhr ){
+						document.getElementById(text).value=data.body.Count;
+					},
+					error: function( jqXhr, textStatus, errorThrown ){
+						console.log( errorThrown );
+					}
+				});
+			}
+			
+			graph();
+			}
+
+			
+			
+			function update(clicked_id) {
+			$.ajax({
+					url: 'https://2v6q5lqyq5.execute-api.us-east-1.amazonaws.com/default/votting-function',
+					dataType: 'json',
+					type: 'post',
+					async: false,
+					contentType: 'application/json',
+					data: JSON.stringify( {
+				  "id":clicked_id,
+				  "type":"update" } ),
+					processData: false,
+					success: function( data, textStatus, jQxhr ){
+						document.getElementById(list.find(list => list.id === clicked_id).text).value=data.body.Count;
+					},
+					error: function( jqXhr, textStatus, errorThrown ){
+						console.log( errorThrown );
+					}
+				});
+			graph();
+				
+			}
+			
+			function graph() {
+			new Chart(document.getElementById("bar-chart"), {
+			type: 'bar',
+			data: {
+			  labels: ["Potato", "LamLam", "Right"],
+			  datasets: [
+				{
+				  label: "Number of votes",
+				  backgroundColor: ["red", "blue","yellow"],
+				  data: [document.getElementById("Potatotext").value,document.getElementById("LamLamtext").value,document.getElementById("Righttext").value]
+				}
+			  ]
+			},
+			options: {
+			  legend: { display: false },
+			  title: {
+				display: true,
+				text: ''
+			  },
+
+			  scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero:true
+						}
+					}]
+				}
+
+			}
+
+
+		});
+			}
+			
+			
+
+
+		</script>
+	<div align="center">
+		<br>
+		<br>
+		<br>
+		<br>
+		<h1><span id="my-demo">Potato</span></h1>
+		<input type="text" id="Potatotext" disabled>
+		<button type="button" class="btn-primary" id="Potato" onclick="update(this.id)">Support</button>
+		<h1><span id="my-demo2">LamLam</span></h1>
+		<input type="text" id="LamLamtext" disabled>
+		<button type="button" class="btn-primary" id="LamLam" onclick="update(this.id)">Support</button>
+		<h1><span id="my-demo3">Right</span></h1>
+		<input type="text" id="Righttext" disabled>
+		<button type="button" class="btn-primary" id="Right" onclick="update(this.id)">Support</button>
+		<br><br>
+		<button type="button" class="btn-success" id="Right" id="Refresh" onclick="get()">Refresh</button>
+		<br>
+	</div>
+
+	</body>
+</html>
