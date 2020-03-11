@@ -18,4 +18,4 @@ Avaliable for 7x24 and will not stop suddenly.
 No need to have system administration.    
 
 # How to setup:  
-Please visit 
+Please visit https://medium.com/@manbobo2012/build-a-serverless-web-application-within-15-mins-on-aws-8f7771a712ca  
