@@ -27,6 +27,7 @@
 				text: "Righttext"
 			  }
 			];
+			const url = "https://2v6q5lqyq5.execute-api.us-east-1.amazonaws.com/default/votting-function";
 			
 			//get the current status of votting
 			function get() {
@@ -36,7 +37,7 @@
 				id=Object.values(list)[i].id;
 				text=Object.values(list)[i].text;
 				$.ajax({
-					url: 'https://2v6q5lqyq5.execute-api.us-east-1.amazonaws.com/default/votting-function',
+					url: url,
 					dataType: 'json',
 					type: 'post',
 					async: false,
@@ -61,7 +62,7 @@
 			// update the votting status
 			function update(clicked_id) {
 			$.ajax({
-					url: 'https://2v6q5lqyq5.execute-api.us-east-1.amazonaws.com/default/votting-function',
+					url: url,
 					dataType: 'json',
 					type: 'post',
 					async: false,
